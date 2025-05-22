@@ -1,0 +1,21 @@
+\section*{Abstract}
+
+\textit{Introduction}: This study examines the effect of thrombolysis on discharge outcomes for ischaemic stroke patients in England and Wales using UK stroke registry data (the Sentinel Stroke National Audit Programme, SSNAP) and machine learning, and explores the overlap and differences between the groups of patients receiving thrombolysis, and the group of patients predicted to benefit from thrombolysis.
+
+\textit{Patients and methods}:  A total of 78,396 ischaemic stroke patients who attended one of 111 emergency stroke hospitals in England and Wales and had brain imaging within 255 minutes of stroke onset, from 2016 to 2021. We used explainable machine learning (XGBoost with SHAP) to examine the effect of patient characteristics, hospital attended, and use/time of thrombolysis on the patients’ predicted outcome (modified Rankin Scale, mRS) at discharge. We predicted the expected effect of thrombolysis for the 15,680 patients in the test population (25\% of study population).
+
+\textit{Results}: 44\% of the test population received thrombolysis. 60\% of the test population were predicted to benefit from thrombolysis (improved probability-weighted mRS and reduced probability of mRS 5-6). Of those treated, 73\% were predicted to have a better outcome with thrombolysis, and of those not treated, 49\% were predicted to have a better outcome with thrombolysis. Patients with mismatched treatment decisions (actual thrombolysis use vs. predicted to benefit) can not be identified from an isolated feature value. Individual hospitals vary in balancing maximising benefit from thrombolysis vs. avoiding any possible harm.
+
+\textit{Discussion and Conclusion}: Our results demonstrate that selecting the patients most likely to benefit from thrombolysis is complicated, and there remains substantial between-hospital variation in trade-offs between maximising benefit and avoiding any possible harm. This demonstrates the potential of applying explainable machine learning to observational data to extend understanding of stroke treatment outcomes, and to identify patients that would benefit from the opposite thrombolysis decision.
+
+\section*{Plain English Summary}
+
+\textbf{What is the problem?} Use of clot-busting treatment (`\textit{thrombolysis}') in stroke varies a great deal between hospitals.
+
+\textbf{What did we know?} We knew that the largest cause of this variation was from how willing doctors are to use thrombolysis, and who they chose to receive thrombolysis.
+
+\textbf{What did we not know?} We did not know which patients would likely benefit from thrombolysis, and how that group of patients compared to the group who were actually given thrombolysis.
+
+\textbf{What did we do?} We used machine learning to learn which patients different hospitals would give thrombolysis to, and to learn which patients would likely have a better outcome if this treatment was used.
+
+\textbf{What did we find out?} We found that the number of people who would likely benefit from thrombolysis is greater than the number of patients who are actually receiving it. A minority of patients who are receiving thrombolysis currently are probably not benefiting from it. Better targeting of use of thrombolysis would likely to lead to even better outcomes.

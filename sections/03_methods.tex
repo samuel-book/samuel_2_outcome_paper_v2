@@ -1,0 +1,53 @@
+\subsubsection{Quantitative research: Data for predicting thrombolysis use}
+
+% Set footnotes to use letters
+\renewcommand{\thefootnote}{\alph{footnote}}
+
+\subsection{Data}
+
+Data were retrieved for 78,396 emergency ischaemic stroke admissions that that arrived at an acute stroke team in England and Wales by ambulance after their stroke onset, and had their scan within 255 minutes of stroke onset, obtained from the Sentinel Stroke National Audit Programme (SSNAP) for six years, 2016–2021. SSNAP prospectively collects clinical data from 100\% of acute hospitals in England and Wales, with case ascertainment estimated at $>$90\% when compared with administrative coding data. The data excludes patients on anticoagulants (representing 12.9\% of the population) as information required to make a treatment decision may not be fully captured by the dataset (such as time anticoagulant medication last taken). The data includes 111 acute stroke teams (each with at least 250 stroke admissions  and which delivered thrombolysis to at least 10 patients in the study period). Data fields were provided for the hyper-acute phase of the stroke pathway, up to and including our target feature: disability on inpatient discharge. Disability is recorded in the SSNAP dataset using the modified Rankin Scale (mRS).
+
+
+\subsection{Feature selection}
+
+The full dataset contained 57 features that described patient characteristics, acute stroke pathway timings, use/time to thrombolysis, and the attended hospital. We were informed by clinical discussions and modelling to identify the features to include in the model, with the motivation to create an explainable model with fewer features that still captured the majority of the accuracy. We trained XGBoost thrombolysis outcome models on stratified 5-fold cross-validation data, sequentially selecting features to be included in the model as the single best feature to improve performance in terms of the area under the receiver operating characteristic (ROC AUC) curve. In 5-fold cross validation the data is split into 5 different 80:20 train/test splits with each patient being in one, and only one, test set. When included, the hospital attended and weekday feature were included as a one-hot encoded feature.
+
+Code and full results for feature selection may be found at \url{https://github.com/samuel-book/feature_selection_thrombolysis_outcome_ml_paper}
+
+\subsection{Machine learning model: Thrombolysis outcome}
+
+In order to train a model to predict outcome from thrombolysis alone, we excluded the 2,747 patients who had received thrombectomy when training the outcome model. For the 75,649 patients that did not receive thrombectomy, we trained a multiclass classification XGBoost model (using stratified 5-fold cross-validation) to predict the mRS score at discharge from the other feature values (that describe the patients characteristics, their acute stroke pathway timings, use/time to thrombolysis, and the attended hospital). The resulting model prediction was a probability distribution across the seven mRS levels. We used stratified 5-fold cross-validation to test the accuracy of the model, for feature selection, and to test reproducibility of patterns detected. The results from the model fitted on the first k-fold split were used to investigate the relationships between feature values and their contribution to the prediction.
+
+Code, and full results, for the machine learning work may be found at \url{https://github.com/samuel-book/thrombolysis_outcome_ml_paper}
+
+\subsection{Model accuracy}
+
+Model accuracy (using stratified 5-fold cross-validation) is reported as: percent correct, percent correct within one mRS category, sensitivity and specificity, ROC AUC, and confusion matrix. We used the multiclass method \textit{one vs rest} \cite{fawcett_introduction_2006, hand_simple_2001} for computing the ROC AUC from the sklearn python package \cite{scikit-learn} which gives a measure of how well the model can identify the class from the other classes, on a class by class basis.
+
+\subsection{SHapley Additive exPlanation (SHAP) values}
+
+We sought to make our models explainable using SHAP values \cite{lundberg_unified_2017}. SHAP provides a measure of the contribution of each feature value to the final predicted likelihood of each of the seven levels of disability (mRS 0 to mRS 6) at discharge for that individual. SHAP values provided the influence of each feature as the change in log-odds of having a certain level of disability at discharge (SHAP values expressed as log-odds are additive; the final model log-odds prediction for an individual is the sum of all its feature SHAP values and the models baseline SHAP value, which is common across all individual predictions). A positive SHAP value represents that the corresponding feature value increases the likelihood for that individual to have that mRS level at discharge, and a negative SHAP value represents that the feature value reduces the likelihood for that patient to have that mRS level at discharge. SHAP values can be assessed \textit{locally} at patient level, and \textit{globally} at patient cohort level to understand general patterns of how discharge outcomes differ by each of the patient, pathway, and hospital characteristics. We also illustrated our model with \textit{prototype} patients which vary patient characteristics in a controlled way.
+
+\subsection{Counterfactual treatment: Predicting if a patient would be likely to have a better outcome with or without thrombolysis}
+
+We used the first k-fold \textit{thrombolysis outcome} model to calculate the counterfactual outcome for each treatment option (with and without thrombolysis) for the 15,680 patients in the first k-fold test set. We represented patients as receiving thrombolysis by setting the feature \textit{onset to thrombolysis time} to the sum of the recorded pathway durations for the patient (\textit{onset to arrival} and \textit{arrival to scan}) and added on the median \textit{scan to thrombolysis time} of their attended hospital. The median \textit{onset to thrombolysis time} for the 15,680 patients is 162 minutes (range 27 to 316 minutes). We represented patients as not receiving thrombolysis by setting the feature \textit{onset to treatment time} to 9,999 minutes. We translated the resulting two predicted probability distributions of disability at discharge (with and without thrombolysis) into a binary feature to represent whether the patient was predicted to have a better outcome receiving thrombolysis. We used a conservative definition to determine whether a patient has a better outcome with treatment from the two probability distributions, where both of these criteria must be met: 
+
+\begin{enumerate}
+    \item A reduction in probability-weighted mRS (a measure of the mid-point location of disability; it is the sum of each mRS outcome multiplied by the probability of that outcome occurring).
+    \item A reduction in the likelihood of a very bad outcome (mRS 5-6, complete dependency or death).
+\end{enumerate}
+
+\subsection{Patient characteristics that contribute to a mismatch between actual thrombolysis use and predicted best outcome}
+
+We analysed the distribution of feature values for the two patient cohorts that had a mismatch between the observed use of thrombolysis and a decison based on the machine learning model:
+
+\begin{enumerate}
+    \item Patients predicted by the \textit{thrombolysis outcome} model to have a better outcome with thrombolysis, but did not receive thrombolysis (1,842 patients) 
+    
+    \item Patients predicted by the \textit{thrombolysis outcome} to have a worse outcome with thrombolysis (an increase in either probability-weighted mRS or the probability of being mRS 5-6), but received thrombolysis (4,297 patients)
+\end{enumerate}
+
+
+\subsection{Hospital trade-off between maximising benefit from thrombolysis and minimising risk of harm from thrombolysis}
+
+We trained an XGBoost \textit{thrombolysis decision} model on the first k-fold data split, to predict the likelihood of a patient receiving thrombolysis, using methods previously described \cite{pearn_what_2023}. We used this \textit{thrombolysis decision} model to predict the thrombolysis decision of each of the 15,680 patients in the first k-fold test set at each of the 111 stroke teams (by setting their feature \textit{stroke team} value to each of the stroke teams in turn). We used the \textit{thrombolysis outcome} model to predict the two mRS distributions at discharge (with and without treatment) for each of the 15,680 patients, and translated this into a binary feature to represent whether the patient was predicted to have a better outcome receiving thrombolysis. To remove the affect that hospital attended has on patient outcome at discharge, for each of the 15,680 patients in the first k-fold test set, we predicted outcomes at a hospital with the most neutral contribution to outcomes. To compare maximising benefit from thrombolysis and avoiding potential harm from thrombolysis we defined measures for \textit{sensitivity} and \textit{specificity} of treatment. \textit{Sensitivity} was calculated as the proportion of patients who were predicted to benefit from thrombolysis (from the \textit{thrombolysis outcome} model) who were predicted to receive thrombolysis at each team (from the \textit{thrombolysis decision} model). \textit{Specificity} was calculated as the proportion of patients who were predicted not to benefit from thrombolysis (from the \textit{thrombolysis outcome} model) who were not predicted to receive thrombolysis at each team (from the \textit{thrombolysis decision} model). A low \textit{sensitivity} would indicate a higher likelihood of not treating people who would benefit from thrombolysis, and a low \textit{specificity} would indicate a higher likelihood of treating people who would not benefit from thrombolysis.

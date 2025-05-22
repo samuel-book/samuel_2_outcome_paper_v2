@@ -1,0 +1,38 @@
+\section{Discussion}
+
+%%%%%% INCLUDE %%%%%%
+
+% Summarise main points
+% Compare to other work
+% Clinical significance
+% Limitations & future work
+
+
+%%%%%%%%%%%%% Summarise main points %%%%%%%%%%%%%
+As thrombolysis carries a risk of harm (principally brain haemorrhage), determining whether a patient is likely to have an improved outcome with thrombolysis requires considering whether there is likely to be an average improvement in disability score (the mid point of predicted discharge disability probabilities), and whether there could be an increased risk of severe harm, which we defined as a disability at discharge of mRS 5-6 (severe disability or death). In order to create a simpler category of `improved outcome' with thrombolysis we took a conservative view that there should be better predicted average outcomes and a reduction of risk of death or severe disability. In this work we did not model risk of haemorrhage in isolation as we wished to focus on all-cause outcomes and overall net benefit/risk of thrombolysis.
+
+We found general agreement between actual thrombolysis use and best predicted outcomes, though we found decisions based on the outcome model would support higher use of thrombolysis than is actually the case. Of those who did not receive thrombolysis, the outcome model predicted that nearly half of them would have likely benefited from thrombolysis. Of those that did receive thrombolysis we found about one in four may be being given thrombolysis without there being predicted benefit. Of those receiving thrombolysis when they would likely not benefit from it, or vice-versa, we found no simple way to identify patients from any individual patient feature; it is a combination of patient features that affect whether a patient will likely receive benefit from thrombolysis or not. For example, the chance of benefit is improved with more severe stroke or earlier use of thrombolysis. As such, with milder stroke, it may be necessary to give thrombolysis earlier (all other patient characteristics beings equal) in order to achieve net benefit. Such interaction effects on outcome are not easy to capture in binary cut-offs, such as those described by stroke severity or time limits commonly used in clinical guidelines.
+
+We found that the hospital attended affected reported outcome after stroke, after allowing for other patient characteristics. This could be due to 1) some hospitals discharging earlier and with more disability (e.g. with community rehabilitation available), 2) effects of other hospital treatments on outcomes (e.g. better/worse stroke unit care), or 3) hospitals assessing disability at discharge differently. From our model we cannot speculate further, but by including stroke team in the model we adjust the model for these effects, allowing a clearer view of other patient features affecting outcome.
+
+There was an apparent trade-off in decision-making between hospitals. Those hospitals who gave thrombolysis to more patients who would benefit from it (higher \textit{sensitivity}) were also more likely to give thrombolysis to more patients who would not benefit from it (lower \textit{specificity}). This represents a trade-off between `\textit{Miss no benefit}' and `\textit{Do no harm}'. Maximising benefit while minimising harm is likely to require more sophisticated guidance on use of thrombolysis, such as that indicated by our model.
+
+In order to compare decisions and outcomes for key parts of the analysis we simplified the outcome in a dichotomised \textit{good} vs \textit{bad}. The spread of benefit and disbenefit showed many patients may be at the border of benefit and disbenefit which is obscured to some extent with the dichotomised outcome. We used a conservative measure of a good outcome where the average disability should be improved while also reducing the risk of the worst outcomes. Of those we classified as a bad outcome from thrombolysis, two thirds had an improvement in \textit{either} average disability or probability of being discharged mRS 5-6.  
+
+%%%%%%%%%%%%% Compare to other work %%%%%%%%%%%%%
+
+Our work supports that use of thrombolysis can improve outcome in many stroke patients (see our companion paper comparing our observed benefit of thrombolysis to clinical trials \cite{pearn_thrombolysis_2024}) and many patients may currently be missing benefit. In previous work we have identified that willingness to use thrombolysis differs between stroke teams \cite{allen_use_2022, allen_using_2022}. In this current work we observe that this willingness to use thrombolysis is associated with a predicted trade off between sensitivity (not missing benefit) and specificity (not doing harm) of treatment.
+
+%%%%%%%%%%%%% Clinical significance %%%%%%%%%%%%%
+
+The major significance of this work is that there appears to be potential to improve use of thrombolysis both by increasing use of thrombolysis (many patients appear to be missing the benefit of thrombolysis), but also by better targeting of thrombolysis to avoid those patients more likely to be harmed by thrombolysis. It is possible that, while not perfect, better use and targeting of thrombolysis could be achieved by some simple algorithm (such as a decision-tree that requires no on-scene computational prediction). 
+
+%%%%%%%%%%%%% Limitations & future work %%%%%%%%%%%%%
+
+\subsection{Study limitations and further work}
+
+Our model is limited to data available in SSNAP. Though the accuracy overall is good, it is not intended for individual clinical decision-making. There may be unmeasured factors not in SSNAP that are contributing to the decision to treat and to outcomes. Our focus was on overall patterns present in the data. In the absence of individual patient-level predictions, we suggest future work should focus on providing more sophisticated guidance (though without requiring specialist models) on selection of patients for thrombolysis. There is also significant scope to use the same techniques to study variation in use of thrombectomy, and how that variation affects patient outcomes.
+
+The outcome measure available for the study to use, mRS at discharge, is a measure of independence, and as such, may not capture other life changing symptoms of stroke, such as mental and cognitive healthy and well-being.
+
+In the current study we predicted overall outcome, rather than specifically estimating risk of thrombolysis-induced haemorrhage. Future work could investigate separate risk and benefit models (separately predicting risk of thrombolysis-induced haemorrhage and benefit only in absence of thrombolysis-induced haemorrhage). 

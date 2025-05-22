@@ -1,0 +1,111 @@
+\documentclass{article}
+
+
+% Formatting
+\DeclareUnicodeCharacter{2060}{\nolinebreak} % Prevent unicode (U+2060) error on local complile
+\frenchspacing % No double spacing between sentences
+\hbadness=1000000 % Turn off \hbox badness warnings
+\linespread{1.2} % Set linespace
+
+% Packages
+\usepackage{url} % Tidy web links
+\usepackage{microtype} % 'Improved' typesetting
+\usepackage{parskip} % Adds white space between paragraphs
+\usepackage[super]{natbib} % Citations using superscript
+\usepackage[a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{longtable,booktabs}  % For tables
+\usepackage{caption} % For figure and table captions
+\usepackage{graphicx} % Adds more functionality to graphics for inclusion of figures
+\usepackage{lineno} % Allows use of \linenumbers to add line numbers 
+\usepackage[toc,page]{appendix}
+\usepackage[utf8]{inputenc}
+\frenchspacing % No double spacing between sentences
+\linespread{1.2} % Set linespace
+\usepackage{authblk} % For author formatting
+\usepackage{lmodern} % A scalable font - avoids erros due to non-sclabale fonts
+\usepackage{subcaption} % Allows use of subfigures
+\DeclareUnicodeCharacter{2060}{\nolinebreak} % Prevent unicode (U+2060) error on local complile
+\usepackage{cclicenses} % For creative commons license
+\usepackage{xcolor} % for coloured text
+\usepackage{xurl} %for url but with more flexible linebreaking
+\usepackage{markdown}
+\usepackage{mwe,tikz}\usepackage[percent]{overpic} % overlay figures (for fig 2)
+\usepackage{placeins} % to use \FloatBarrier where want a hard break between content (to force and order of text and figures
+\usepackage{verbatim} % word count
+\usepackage{float} % Force figure positions
+
+% Choose your own colour
+\usepackage{color}
+\newcommand{\mjanote}[2][\textcolor{red}{\dagger}]{\textcolor{red}{$#1$}\marginpar{\color{red}\raggedright\tiny$#1$ #2}}
+\newcommand{\mjaFIXME}[1]{\textcolor{red}{[\textbf{FIXME} \textsl{#1}]}}
+\newcommand{\kpnote}[2][\textcolor{magenta}{\dagger}]{\textcolor{magenta}{$#1$}\marginpar{\color{magenta}\raggedright\tiny$#1$ #2}}
+\newcommand{\kpFIXME}[1]{\textcolor{magenta}{[\textbf{FIXME} \textsl{#1}]}}
+
+\hbadness=1000000 % Turn off \hbox badness warnings
+
+
+% Info on wordcounts:
+% https://www.overleaf.com/learn/how-to/Is_there_a_way_to_run_a_word_count_that_doesn%27t_include_LaTeX_commands%3F
+
+% To include refs in word count:
+%TC:incbib
+
+\newcommand{\detailtexcount}[1]{%
+  \immediate\write18{texcount -merge -sum -q #1.tex output.bbl > #1.wcdetail }%
+  \verbatiminput{#1.wcdetail}%
+}
+
+% Count tables in wordcount (change to 0 0 if tables not included in word count)
+%TC:group table 0 1
+%TC:group tabular 1 
+
+\begin{document}
+
+
+
+% Ignore title and abstract in word count
+%TC:ignore
+\include{sections/00_title}
+\maketitle
+%TC:endignore
+
+%\include{sections/paper}
+\input{sections/01_abstract}
+\input{sections/02_introduction}
+\input{sections/03_methods}
+\input{sections/04_results}
+\input{sections/05_discussion}
+
+%\include{sections/07_references}
+
+
+\section{References}
+\bibliographystyle{naturemag}
+%\bibliographystyle{plainnat}
+%\bibliographystyle{unsrt}
+%\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+\newpage
+\include{sections/06_other_sections}
+
+% Number for supplementary material
+\newcommand{\beginsupplement}{
+    \setcounter{section}{0}
+    \renewcommand{\thesection}{S\arabic{section}}
+    \setcounter{figure}{0}
+    \renewcommand{\thefigure}{S\arabic{figure}}
+    \setcounter{table}{0}
+    \renewcommand{\thetable}{S\arabic{table}}
+}
+
+\beginsupplement
+%\include{sections/08_supplementary_material}
+
+% Word counts - Don't count these!
+%TC:ignore
+%\section*{Word counts}
+%\detailtexcount{main}
+%TC:endignore
+
+\end{document}
